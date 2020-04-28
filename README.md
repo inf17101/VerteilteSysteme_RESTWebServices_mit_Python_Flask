@@ -1,0 +1,3 @@
+# Verteilte Systeme: REST Web Services mit Python Flask
+
+Das Ziel der Arbeit ist es, die grundlegende Funktionsweise von Flask und von \ac{REST}ful Web Services zu beschreiben. Im Fokus steht dabei der Praxisbezug und dem Erstellen eines funktionsfähigen \ac{API} im \ac{REST}-Design, die die CRUD-Operationen (Create, Read, Update, Delete) realisiert.  Dabei sind die Ausformulierungen in Beziehung zu den Eigenschaften der \ac{REST}-Architektur und den Grundlagen von verteilten Systemen zusetzen. Dem Leser soll vermittelt werden, wie eine Datenbank in die Flask Applikation eingebunden werden kann. Zusätzlich soll die Arbeit eine Einführung darüber geben, wie die CRUD-Applikation für den Produktivbetrieb bereitgestellt werden kann.

@@ -1,0 +1,676 @@
+\documentclass[a4paper,titlepage,halfparskip,12pt,listof=numbered]{scrreprt}
+
+\usepackage[ngerman]{babel, varioref}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{geometry}
+\geometry{a4paper, top=20mm,left=20mm,right=20mm,bottom=20mm, footskip=12mm}
+\usepackage{longtable}
+\usepackage{setspace}
+\usepackage{lmodern}
+\usepackage{notoccite}
+%blocksatz
+\sloppy
+%formatierung literaturverzeichnisangabe
+\bibliographystyle{unsrt}
+
+%Auflistungen von Punkten
+\usepackage{paralist} 
+%urls anzeigen
+\usepackage{url}
+
+%Codelisting
+\usepackage{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\definecolor{burntorange}{rgb}{0.8, 0.33, 0.0}
+\definecolor{cornellred}{rgb}{0.7, 0.11, 0.11}
+
+\usepackage{listingsutf8}
+\lstset{
+commentstyle=\color{mygreen},
+numberstyle=\small\color{black},
+stringstyle=\color{mymauve},
+emph={square}, 
+showstringspaces=false,
+flexiblecolumns=false,
+tabsize=2,
+numbers=left,
+numberblanklines=false,
+stepnumber=1,
+captionpos=b,
+numbersep=5pt,
+xleftmargin=15pt,
+breaklines=true,
+inputencoding=utf8,
+extendedchars=true,
+extendedchars=true,
+basicstyle=\ttfamily\footnotesize,
+keywordstyle = \bfseries\color{burntorange},
+keywordstyle = [2]\bfseries\color{cornellred},
+literate=%
+    {Ä}{{\"A}}1%
+    {Ö}{{\"O}}1%
+    {Ü}{{\"U}}1%
+    {ä}{{\"a}}1%
+    {ö}{{\"o}}1%
+    {ü}{{\"u}}1%
+    {ß}{{\ss}}1,%
+frame=single,
+frameround=ffff
+}
+
+%meta data
+\usepackage[hidelinks]{hyperref}
+\urlstyle{same}
+
+%akronymverzeichnis
+\usepackage[printonlyused]{acronym}
+
+% titel definieren
+\newcommand{\titel}{REST Web Services mit Python Flask}
+
+%autor definieren
+\newcommand{\autor}{Oliver Klapper}
+\newcommand{\keywords}{\autor,\titel,Hausarbeit}
+
+% Allgemeines für das PDF
+\hypersetup{
+    pdftitle={\titel},
+    pdfauthor={\autor},
+    pdfcreator={\autor},
+    pdfsubject={\titel},
+    pdflang={Deutsch},
+    pdfdisplaydoctitle=true,
+    pdfkeywords={\keywords},
+}
+
+% set distances of chapter headlines in document
+\renewcommand*\chapterheadstartvskip{\vspace*{20pt}} % set distance to header
+% set distance to text
+%\renewcommand*\chapterheadendvskip{%
+%  \vspace*{1\baselineskip plus .1\baselineskip minus .167\baselineskip}}
+
+\begin{document}
+
+%inhaltsverzeichnis
+	% Inhaltsverzeichnis
+	\cleardoublepage
+	\begin{spacing}{1.1}
+		\begingroup
+		
+			% auskommentieren für Seitenzahlen unter Inhaltsverzeichnis
+			\renewcommand*{\chapterpagestyle}{empty}
+			\pagestyle{empty}
+			
+			
+			%\setcounter{tocdepth}{1}
+			%für die Anzeige von Unterkapiteln im Inhaltsverzeichnis
+			\setcounter{tocdepth}{2}
+			
+			%\tableofcontents
+			\clearpage
+		\endgroup
+	\end{spacing}
+
+%% new header/footer settings
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}} % make header rightmark
+\fancypagestyle{fancyheadlines}{
+\pagenumbering{arabic}
+\fancyhf{}
+\lhead{\slshape\rightmark}
+%%\rhead{\slshape\nouppercase{\leftmark}}
+\renewcommand{\headrulewidth}{0.4pt}
+%\lfoot{\slshape DHBW Stuttgart | Lukas Priester, Oliver Klapper}
+\cfoot{\thepage}
+\renewcommand{\footrulewidth}{0.4pt}
+}
+
+% Redefine the plain page style, show only page number in figure,table,...contents
+% and chapter pages
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  %\lfoot{\slshape DHBW Stuttgart | Lukas Priester, Oliver Klapper}%
+  \cfoot{\thepage}
+  \renewcommand{\headrulewidth}{0pt}% Line at the header invisible
+  \renewcommand{\footrulewidth}{0.4pt}% Line at the footer visible
+}
+
+\newpage
+
+
+\begin{onehalfspacing}
+
+%% header and footer settings
+\pagestyle{fancyheadlines}
+
+\chapter{RESTful Web Services als moderne Architektur}
+\label{chap:Einleitung}
+
+Das Web zeichnet sich durch ein enormes Wachstum aus. Ständig entstehen neue innovative, verteilte Systeme. Zum
+größten Teil findet man spezielle Lösungen, die schwer erweiter- und
+wiederverwendbar sind. Durch applikationsspezifische Schnittstellen wird
+bei der Erstellung von Mashups\footnote{Mashups sind Erweiterungen oder Kompositionen vorhandener Web Services.\cite{mashupDefinition}} Spezialwissen und massiver Zeitaufwand
+benötigt. RESTful Web Services sind in den vergangenen Jahren immer beliebter geworden, weil Unternehmen immer mehr Anwendungen integrieren müssen. Anwendungskomponenten sollen direkt untereinander kommunizieren, einfach austauschbar und leicht zu integrieren sein. Die klassische Sichtweise auf das \ac{WWW}, das als verteiltes System, vielen Clients den Zugriff auf Dokumente mit einem Browser realisiert, erfüllt diese Anforderungen nicht ausreichend. \ac{REST} verspricht
+Wiederverwendbarkeit, Erweiterbarkeit, Skalierbarkeit und die einfache
+Integration in die vorhandene Netz-Struktur.\cite[S.1]{dazerRESTUeberblick}
+
+Es gibt viele Frameworks in unterschiedlichen Programmiersprachen, um RESTful Web Services mit wenig Aufwand implementieren zu können. Eines von den Frameworks ist Flask, das die Programmiersprache Python als Modul bereitstellt. Im Jahr 2018 wurde Flask innerhalb der Python Developers Survey \cite{pythonDeveloperSurvey2018} zum beliebtesten Web-Framework gewählt, siehe \autoref{img:FlaskSurvey2018}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.5\linewidth]{images/FlaskSurvey2018}
+	\caption{Ergebnis der Python Developers Survey 2018 \cite{pythonDeveloperSurvey2018}}
+	\label{img:FlaskSurvey2018}
+\end{figure}
+
+In einer aktuelleren Statistik aus dem Jahr 2020 belegt Flask den 12. Platz \cite{webframeworksStatistic}. Die Statistiken bestätigen, das Flask innerhalb der Community ein aktuelles und beliebtes Framework ist. Auch Unternehmen wie Netflix, benutzen laut ihrem offiziellen Blog Flask, um Tests für Netflix-Services zu automatisieren und leicht integrieren zu können \cite{netflixFlaskAutomation}.
+
+Die Hausarbeit gibt dem Leser einen Einblick in die Funktionsweise von Flask und vermittelt Grundlagen von verteilten Systemen. In einem Praxisbeispiel soll eine Applikation in Flask programmiert werden und dem Leser vermittelt werden, wie sich mit Flask ein einfacher Web Service im \ac{REST}-Design programmieren lässt.
+
+\begingroup
+\renewcommand{\cleardoublepage}{}
+\renewcommand{\clearpage}{}
+
+\chapter{Ziele der Arbeit}
+\label{chap:Ziele}
+Das Ziel der Arbeit ist es, die grundlegende Funktionsweise von Flask und von \ac{REST}ful Web Services zu beschreiben. Im Fokus steht dabei der Praxisbezug und dem Erstellen eines funktionsfähigen \ac{API} im \ac{REST}-Design, die die CRUD-Operationen (Create, Read, Update, Delete) realisiert.  Dabei sind die Ausformulierungen in Beziehung zu den Eigenschaften der \ac{REST}-Architektur zusetzen. Dem Leser soll vermittelt werden, wie eine Datenbank in die Flask Applikation eingebunden werden kann. Wichtig ist es, in den Ausformulierungen, den Bezug zu den Grundlagen von verteilten Systemen aus der Vorlesung von Stefan Richter der \ac{DHBW} herzustellen. Zusätzlich soll die Arbeit eine Einführung darüber geben, wie die CRUD-Applikation für den Produktivbetrieb bereitgestellt werden kann.
+
+\endgroup
+
+\chapter{Grundlagen von \ac{REST}ful Web Services}
+\label{chap:REST}
+
+Der Begriff \ac{REST}ful Web Services oder \ac{REST} Web Services besteht aus zwei einzelnen fachlichen Begriffen - \ac{REST} (REpresentational State Transfer) und Web Service. Im Folgenden werden beide Begriffe definiert und erläutert, was die Zusammensetzung der Begriffe bedeutet.
+
+In der Literatur wird der Begriff Web Service unterschiedlich definiert. Einige Autoren legen Web Services auf eine konkrete Technologie fest. Mathas bemerkt: \glqq Web Services und SOA-Systeme werden heute noch häufig als Synonyme betrachtet.\grqq \footnote{\cite[S.181]{mathas2008soa}} Nach Snell \cite{snell2002webservice} hingegen ist ein Web Service eine über ein Netzwerk zugängliche Schnittstelle zu Anwendungsfunktionen, die mit Hilfe von Standardtechniken des Internets realisiert wird. Tanenbaum und van Steen in \cite{andrew2008verteilte} teilen die Auffassung von Snell, indem sie Web Services wie folgt definieren: Die Annahme, dass die clientseitige Software eines webbasierten Systems aus einem Browser besteht, der als Schnittstelle zum Benutzer fungiert, trifft nicht mehr zu. Ein Web Service kommuniziert mit entfernten Anwendungen ohne dabei unmittelbar mit Endbenutzern zu interagieren. Dieser zeichnet sich dadurch aus, dass er sich an eine Sammlung von Standards hält. Diese erlauben es, dass Client-Anwendungen, die diese Standards ebenfalls befolgen, den Web Service über das Internet finden und benutzen können. Diese Standards bilden den Kern der Webdienstarchitektur. Die Grundidee eines Web Services ist folglich, dass eine beliebige Client-Anwendung die Dienste, die von einer Server-Anwendung verfügbar gemacht wird, aufrufen kann. Diese Definition wird in der vorliegenden Arbeit verwendet.
+
+Web Services lassen sich in zwei Architekturen einordnen \cite[S.1]{dazerRESTUeberblick}: \ac{SOA} und \ac{ROA}. Kennzeichnend für \ac{SOA} sind Technologien wie \ac{SOAP} oder \ac{RMI}. Methoden-Aufrufe werden dabei über \acs{XML}-basierte Nachrichten durchgeführt, die an einen Service-Endpunkt gesendet werden. Dazer ist in \cite[S.1]{dazerRESTUeberblick} der Meinung, dass einerseits durch diese Architektur zwar hoch optimierte Systeme entstehen, andererseits die Systeme schwer erweiterbar und unhandlich sind. Genau dort setzt die Architektur \ac{REST} auf. Dazer ordnet sie in die Architektur \ac{ROA} ein, welche Funktionen mit einigen wenigen Basisoperationen auf direkt adressierbare Ressourcen realisiert. Der Architektur-Stil REST wurde erstmals im Jahre 2000 von Roy Thomas Fielding in seiner Dissertation mit dem Titel „Architectural Styles and the Design of Network-based Software Architectures“ \cite[S.76]{fieldingREST} definiert. Fielding charakterisiert dort \ac{REST} als Architekturstil, der keinen Prozess und keine Methodik beschreibt, sondern vielmehr eine Empfehlung darstellt, wie Web Services entwickelt werden sollen. Web Services, die nach diesen Empfehlungen aufgebaut sind, werden als \ac{REST}ful bezeichnet. Der Fokus der Architektur liegt auf Erweiterbarkeit, Skalierbarkeit und Interoperabilität \cite[S.105]{fieldingREST}, welche wichtige Begriffe im Zusammenhang mit dem Entwurf von verteilten Systemen darstellen. Erweiterbarkeit und Interoperabilität sind dabei wichtige Eigenschaften der Offenheit eines verteilten Systems. Verteilte Systeme mit großer Offenheit sind fähig, mit Diensten von anderen offenen Systemen zu interagieren \cite[S.25]{andrew2008verteilte}. \autoref{tab:wichtigeBegriffe} liefert eine Definition von drei wichtigen Eigenschaften eines verteilten Systems.
+
+\begin{table}[h]
+\centering
+\caption{Definition wichtiger Begriffe von verteilten Systemen \cite[S.25ff.]{andrew2008verteilte}}
+\begin{tabular}{|l|p{.7\textwidth}|}
+\hline
+\textbf{Skalierbarkeit} & Alle Kriterien, die den Umfang und die Ausdehnung des verteilten Systems bezeichnen. Zum Beispiel: physikalische, geografische Distanz, Quantität von Domänen, Rechenleistung oder maximale Anzahl an Servern/Clients \\
+\hline
+\textbf{Erweiterbarkeit} & Ein verteiltes System sollte so flexibel, sein, dass es einfach ist, neue Komponenten hinzuzufügen ohne die bereits vorhandenen Komponenten negativ zu beeinflussen.\\
+\hline
+\textbf{Interoperabilität} & Beschreibt den Grad inwieweit ein System A mit einem System B zusammenarbeiten kann, in dem sie sich jeweils auf Dienste des anderen verlassen. \\
+\hline
+\end{tabular}
+\label{tab:wichtigeBegriffe}
+\end{table}
+
+Der Autor Tanenbaum führt in \cite{andrew2008verteilte} und der Dozent Stefan Richter (\ac{DHBW}) in \cite{richterEinleitungVS} weitere wichtige Eigenschaften von verteilten Systemen im Detail auf.
+
+Zusammenfassend lässt sich sagen, dass der Begriff \ac{REST}ful Web Services einen Web Service bezeichnet der nach den Empfehlungen und Prinzipien der \ac{REST}-Architektur implementiert ist. Nach \autoref{chap:Ziele} wird im weiteren Verlauf der Arbeit eine \ac{REST} \ac{API} mit dem Framework Flask erstellt. Hier sei nur darauf hingewiesen, dass die Bezeichnungen Web Service und API nach Dazer \cite[S.2]{dazerRESTUeberblick} verschiedene Begriffe darstellen, in dieser Hausarbeit in Bezug auf \ac{REST} allerdings synonym verwendet werden. Ein \ac{REST}ful entworfener Web Service setzt eine \ac{REST}ful API voraus und umgekehrt \cite[S.2]{dazerRESTUeberblick}.
+
+\section{Eigenschaften von \ac{REST}ful Webservices}
+\label{sec:EigenschaftenREST}
+
+Bevor eine \ac{REST} \ac{API} mit Python Flask entworfen wird, werden wichtige Eigenschaften der \ac{REST}-Architektur kurz erläutert. Nach Richter \cite[S.28]{richterKommunikationVS} abstrahiert \ac{REST} das \ac{WWW} und nutzt den Vorteil von bereits vorhanden Ressourcen, wie zum Beispiel einen Web Service mit Datenbanken, \acs{HTTP}-fähige Clients, \acs{HTML} oder \acs{XML}-Parser.
+
+Fielding \cite[S.4]{fieldingREST} und Dazer \cite[S.2]{dazerRESTUeberblick} stimmen miteinander überein, indem sie sagen, dass für ein \ac{REST}ful Design gerne das \ac{HTTP}-Protokoll herangezogen wird. Darin sind auch die oben erwähnten Basisoperationen PUT, GET, UPDATE und DELETE erläutert. Eine genaue Beschreibung der Operationen befindet sich in der englischen Ausgabe \glqq Distributed Systems\grqq des Autors Tanenbaum \cite[S.65]{andrew2008distributed}. Diese Operationen sind wichtige Grundlagen über \ac{HTTP} und werden für das weitere Verständnis vorausgesetzt.
+
+Fielding definiert in seiner Dissertation wichtige Eigenschaften von \ac{REST}, von denen einige in \autoref{tab:EigenschaftenREST} erklärt sind:
+
+\begin{table}[h]
+\centering
+\caption{Wichtige Eigenschaften der \ac{REST}-Architektur \cite[S.78ff.]{fieldingREST}}
+\begin{tabular}{|l|p{.7\textwidth}|}
+\hline
+\textbf{Client-Server} & Separierung des Clients von der Datenhaltung und der Anwendungslogik auf dem Server. Der Client ist dadurch portabler und der Server fällt schlanker aus. Das übt sich positiv auf die Skalierbarkeit des verteilten Systems aus. \\
+\hline
+\textbf{Stateless} & Mit Stateless ist nicht gemeint, dass Client
+und Server ihren Zustand nicht wechseln dürfen. Jede Anfrage vom Client an den Server muss alle Informationen enthalten, die zum Verständnis der Anforderung erforderlich sind. Der Client darf keinen auf dem Server gespeicherten Zustand nutzen. Der Session Status wird vollständig auf dem Client gespeichert.\\
+\hline
+\textbf{Cache} & Caching ist eine Technik, mit der eine Kopie einer bestimmten Ressource gespeichert und auf Anfrage bereitgestellt wird, wodurch zum Beispiel zusätzliche Datenbank-Aufrufe eingespart werden. Das Caching selbst senkt die Latenz und das aufkommende
+Datenvolumen. REST-APIs steuern das Caching, indem sie HTTP-Header verwenden und setzen. Wichtig ist jedoch, dass durch die Replikation der Daten keine Inkonsistenzen entstehen. Das wäre entgegen den Zielen und dem Nutzen von verteilten Systemen. Diese Problematik ist in \cite[S.32]{andrew2008verteilte}, \cite[S45f.]{richterEinleitungVS} oder \cite[S.13]{pythonFlaskREST} im Detail erläutert. \\
+\hline
+\textbf{Uniform Interface} & \ac{REST}ful-Services sollten eine einheitliche Schnittstelle für den Zugriff auf Ressourcen haben. Mittels Basisoperationen (z.B. POST, DELETE) können Daten von Clients manipuliert werden. \\
+\hline
+\textbf{Ressourcen} & Ressourcen sollen einheitlich benannt und über \acs{URI}s aufgerufen werden können - zum Beispiel: \url{https://dhbw-stuttgart.de/getInfo?student-id=111}. Wird mit der \acs{HTTP}-Basisoperation GET eine Anfrage an diese \acs{URI} versendet, erhält der Aufrufer generelle Informationen zum Studenten mit der ID 111. Die Daten können unterschiedlich repräsentiert werden: \acs{XML}, \acs{PDF}, \acs{JSON} als moderne Form, \acs{HTML} und weitere.\\
+\hline
+\end{tabular}
+\label{tab:EigenschaftenREST}
+\end{table}
+
+Für weitere Informationen über die Eigenschaften und Details der \ac{REST}-Architektur, siehe \cite{fieldingREST}, \cite{andrew2008distributed} und \cite{pythonFlaskREST}.
+
+\chapter{Implementierung einer CRUD-Applikation}
+\label{sec:ImplementierungCRUDapp}
+
+Dieses Kapitel zeigt, wie mit Hilfe von Python Flask eine \ac{REST} \ac{API} entwickelt werden kann, die vier Basisoperationen auf Ressourcen durchführen kann. Zunächst wird eine kurze Einführung in Flask gegeben, anschließend die Architektur der CRUD-Applikation erläutert. Der Hauptteil beschäftigt sich, mit der Umsetzung der CRUD-Applikation und wie Datenbankzugriffe in Flask realisiert werden können.
+
+\section{Grundlagen von Python Flask}
+\label{sec:Flask}
+Nachdem nun die Eigenschaften erläutert wurden, kann im nächsten Schritt die Umsetzung einer \ac{REST} \ac{API} mit dem Framework Python Flask beschrieben werden. Flask ist ein \ac{BSD}-lizensiertes Microframework. Entwickler dürfen es frei und kostenlos benutzen. Relan \cite[S.1]{pythonFlaskREST} bezeichnet Flask als ein einfaches und dennoch sehr erweiterbares Framework. Nach seiner Ansicht nach gibt Flask jedem Entwickler die Möglichkeit, die gewünschte Konfiguration für jeden Anwendungsbereich zu wählen. Plugins oder Anwendungen können einfach entwickelt werden. Diese Eigenschaften zeichnen ein Microframework aus \cite{flaskMicroDescription}. Flask wurde von Pocoo, einem Team aus Open Source Entwicklern entwickelt, wird aber aktuell von The Pallets Project weiterentwickelt. High-Level Funktionen wie Datenbankzugriffe oder Benutzerauthentifizierung sind in Flask nicht integriert, es bietet aber die Möglichkeit über Python Module oder Erweiterungen durch die Python Community diese Funktionalitäten einzubinden.\cite[S.1]{pythonFlaskREST}
+
+Die Praxisbeispiele in der Hausarbeit wurden alle mit Pyhton3 durchgeführt. Flask kann über den Python Paketmanager \texttt{pip} einfach installiert werden:
+
+\texttt{python3 -m pip install flask}
+
+Flask besteht aus zwei Komponenten: Werkzeug und Jinja2. Während Werkzeug für Routing, Debugging und für das \ac{WSGI} zuständig ist, nutzt Flask Jinja2 als Template Engine \cite[S.1]{pythonFlaskREST}. Eine Flask Applikation kann direkt in eine Datei programmiert werden und mit \texttt{python3 <dateiname>.py} ausgeführt werden \cite{flaskDevelopmentServer}. Werkzeug startet dann einen internen Development Web Server für Debugging Zwecke, sodass die Flask App ohne weitere Konfigurationen unter folgender \acs{URI} erreichbar ist: \texttt{http://127.0.0.1:5000/} \cite{flaskDevelopmentServer}. Im Anhang \autoref{lst:MinimalFlaskApp} ist eine minimale Flask Applikation dargestellt. Sie importiert das Flask Modul, initiiert die Applikation durch Instanziierung eines Flask Objekts und definiert die Route unter der der Dienst erreichbar ist. Direkt unter der Route ist die Funktion definiert, die aufgerufen wird, wenn die Route zum Beispiel mit Hilfe eines Web Browsers aufgerufen wird. Bei Aufruf der Methode mit dem Übergabeargument \texttt{testuser} erscheint eine Begrüßung des Benutzers im Browser, siehe Anhang \autoref{img:ResultMinimalApp}.
+
+Nach der Vorlesung von Richter \cite[S.21]{richterEinleitungVS} ist Python eine Middleware und eine wichtige Komponente von verteilten Systemen. Tanenbaum \cite[S.19f]{andrew2008distributed} ist der Ansicht, dass eine Middleware eine Softwareschicht ist, um heterogene Computer und Netzwerke zu unterstützen und das Erscheinungsbild eines einzigen Systems anzubieten. Die Middleware definiert Verfahren und Funktionen und macht Applikationen unabhängig von dem darunterliegenden Betriebssystem und dessen Netzwerkkomponenten \cite[S.21]{richterEinleitungVS}, siehe Anhang \autoref{img:MiddlewareArchitecture}. Dieser Auffassung ist zuzustimmen, denn das Flask Modul abstrahiert die Netzwerkkomponenten, die Systemaufrufe und das Socket I/O für Entwickler, sodass eine einfache Benutzung gewährleistet wird. Sie sorgt für Transparenz und erleichtert die Entwicklung. Sie bietet jeder Anwendung eine einheitliche Schnittstelle.
+ 
+\section{Architektur der CRUD-Applikation}
+\label{sec:ArchitekturCRUDapp}
+
+Die Architektur der CRUD-Applikation entspricht der eines klassischen \ac{REST} Web Services, siehe \autoref{img:ArchitectureCRUDapp}. Der \ac{REST} \ac{API} Server bietet Systemen verschiedener Art (Android-Client, Web-Client, IOS-Client) eine ressourcenorientierte, webbasierte Schnittstelle zu einem Datenbankserver \cite[S.5]{pythonFlaskREST}. Nach Kunal \cite[S.5]{pythonFlaskREST} ist es über diese Plattform möglich, dass heterogene Clients miteinander kommunizieren können, wenn alle die gleiche Sprache verstehen. Für die CRUD-Applikation wird eine MySQL-Datenbank verwendet, die ein relationales \ac{DBMS} darstellt \cite[S.28]{pythonFlaskREST}. Die Grundidee ist, dass die \ac{REST} \ac{API} Zugriff auf eine Autoren-Datenbank ermöglicht und Clients die vier CRUD-Operationen anbietet:
+
+\begin{description}
+\item[CREATE:] Einen Autor mit seinem Fachgebiet in die Datenbank hinzufügen.
+\item[READ:] Einen oder mehrere Autoren auslesen.
+\item[UPDATE:] Den Namen oder das Fachgebiet ändern.
+\item[DELETE:] Einen Autor in der Datenbank löschen.
+\end{description}
+
+Die Clients kommunizieren mit der Flask \ac{REST} \ac{API} über das Datenaustauschformat \ac{JSON}, welches auf dem Key-Value-Prinzip basiert. Für ein Beispiel, siehe Anhang \autoref{img:ExampleJSON}.
+
+In den folgenden Abschnitten wird die gesamte Flask-Applikation in eine Datei \glqq app.py\grqq programmiert. Jeder Abschnitt erweitert und ergänzt die Datei, um am Ende eine funktionsfähige Applikation zu erhalten.
+
+\section{Datenbankzugriff auf MySQL-Datenbanken}
+\label{sec:DBzugriffFlask}
+
+Flask kann nach \cite{flaskMicroDescription} ohne weiteres Installieren von Erweiterungen nicht auf Datenbanken zugreifen. Aus diesem Grund wird SQLAlchemy installiert. SQLAlchemy ist ein \ac{ORM}, das mit Hilfe von Python auf SQL-basierte Datenbanken, wie zum Beispiel MySQL, PostgreSQL, SQLite und weitere), zugreifen kann. Dazu sind Schemen notwendig, die in Form von Klassen angelegt werden. Die Schemen definieren die Tabelle der Datenbank. SQLAlchemy kann mit Hilfe der Schemen die Tabellen automatisch anlegen oder auf bereits vorhandene Tabellen zugreifen. Der Entwickler kann also im Code Objekte verwenden, während die Konvertierungen und der Datenaustausch mit der Datenbank vollständig vom \ac{ORM} übernommen wird. Das vereinfacht die Entwicklung.\cite[S.29ff]{pythonFlaskREST}
+
+Nach der Ansicht von Kunal \cite[S.31]{pythonFlaskREST} benötigen mit Ausnahme von SQLite alle anderen Datenbank-Engines eine eigene Bibliothek für den Datenbankzugriff. Der folgende Befehl installiert SQLAlchemy und PyMySQL als DBAPI:
+
+\texttt{python3 -m pip install flask-sqlalchemy pymysql}
+
+Im Anhang \autoref{lst:configFlaskSQLAlchemy} ist die Datei \texttt{app.py} dargestellt, die Flask und SQLAlchemy importiert und die Konfiguration für den Datenbankzugriff zeigt. Nach den Imports wird eine Flask-Instanz erzeugt und danach die SQLAlchemy DB \acs{URI} konfiguriert, in der der DB Konnektor PyMySQL und die Zugangsdaten für den Datenbankzugriff eingetragen sind. Wichtig ist das der Datenbankname, der in der \acs{URI} angegeben werden muss, bereits auf dem \ac{DBMS} existiert. Anschließend wird ein SQLAlchemy-Objekt erzeugt, das die \ac{ORM}-bezogenen Aktivitäten durchführen soll.\cite[S.31ff]{pythonFlaskREST}
+
+Hier ist kritisch anzumerken, dass sensible Zugangsdaten in der Python Datei enthalten sind. Ein Angreifer, der Zugriff auf den Code bekommt, könnte das System und die Datenbank ungehindert kompromittieren. Um die Situation zu verbessern, wäre es sinnvoll, die Zugangsdaten in einer separaten Datei oder in den System-Variablen des Betriebssystems zu speichern und in der Applikations-Datei einzulesen. \autoref{lst:configFlaskSQLAlchemySecure} im Anhang zeigt die zweite Möglichkeit unter der Annahme, dass die Applikation auf einem Linux Betriebssystem programmiert wird.
+
+\subsubsection*{Erstellen der Datenbank für die CRUD-Applikation}
+
+Für die Kommunikation mit Tabellen der Datenbank benötigt SQLAlchemy ein Schema der Tabelle, dass alle Metadaten der Tabelle beinhaltet\cite[S.31]{pythonFlaskREST}. \autoref{lst:tableSchemaAuthor} aus dem Anhang definiert ein Schema für die Tabelle \glqq author\grqq. Die Klasse \texttt{Author} repräsentiert ein Schema, indem sie von der Klasse \texttt{db.Model} erbt. Der Code aus \autoref{lst:tableSchemaAuthor} muss nach der Instanziierung des \texttt{db} Objekts in die Datei  \glqq app.py\grqq eingefügt werden, siehe \cite[S.33]{pythonFlaskREST}. Der Code definiert drei Spalten der Tabelle: ID als eine Ganzzahl und als Primärschlüssel (englisch Primary Key), Name und Spezialisierung eines Autors als Zeichensatz. Zudem ist in Klammern die Länge der Zeichensätze auf eine bestimmte Anzahl begrenzt. Der Konstruktor \texttt{init} weist beim Erzeugen eines Objekts die übergebenen Werte den Attributen \texttt{name} und \texttt{specialisation} entsprechend zu. Auffällig ist, dass dem Attribut \texttt{id} im Code nicht explizit ein Wert zugewiesen wird. Durch das Setzen der Variable \texttt{autoincrement} wird der ganzzahlige Wert beim Anlegen eines Autors in der Datenbank automatisch inkrementiert und hinzugefügt. Für mehr Informationen siehe \cite{autoincrementSQLAlchemy}. Die Methode \texttt{create} fügt das erstellte Autor-Objekt der Datenbank hinzu schließt die Transaktion durch einen Commit ab. Dadurch kann ein erstelltes Autor-Objekt im Code auch der Datenbank hinzugefügt werden. Das abschließende Statement \texttt{db.create\_all()} erstellt beim Programmstart automatisch alle in der Applikation definierten Tabellen in der Datenbank.\cite[S.33ff.]{pythonFlaskREST}
+
+Um das Marshalling\footnote{Marshelling bedeutet das Format eines Datensatzes in ein anderes Format zu konvertieren. \cite[S.36]{richterArchitekturVS}} in \ac{JSON} von Rückgabewerten von SQLAlchemy Aktionen zu vereinfachen, wird das Modul marshmallow in die Flask Applikation eingebunden. Konkret wird die Erweiterung in dieser Arbeit verwendet, um Objekte vom Typ Autor in \ac{JSON} zu serialisieren oder zu deserialisieren. Hierzu muss zuerst das marshmallow und das flask\_marshmallow Paket mittels pip installiert werden. Anschließend müssen die folgenden Pakete unter den bereits importierten Modulen eingebunden werden:
+
+\texttt{from marshmallow\_sqlalchemy import ModelSchema}\\
+\texttt{from marshmallow import fields, ValidationError}
+
+Wie ein Schema für das Marshalling der Parameter erstellt werden kann, zeigt \autoref{lst:marshmallowSchema} im Anhang. Der Codeabschnitt muss nach dem \texttt{db.create\_all()} Statement eingefügt werden, denn das Model muss vorher existieren. Der Code in \autoref{lst:marshmallowSchema} ordnet den Attributen des Autor-Objekts Felder zu und in der Klasse \texttt{Meta} wird das Model definiert, auf das sich die Format-Konvertierung beziehen soll. Das Marshalling der SQLAlchemy Rückgabewerte wird später innerhalb des Codes für die Definition der \ac{API}-Routen benötigt. Wie das Modul im Detail verwendet wird, ist in der offiziellen Dokumentation von marshmallow \cite{marshmallowQuickstart} zu entnehmen.
+
+Vor der Implementierung der \ac{REST} \ac{API} müssen folgende Erweiterungen unter den vorherigen Imports importiert werden:
+
+\texttt{from flask import Flask, request, jsonify, make\_response}
+
+\section{CREATE Operation der \ac{REST} \ac{API}}
+\label{sec:createAPI}
+
+Mit der CREATE Operation soll ein Autor in die Datenbank hinzugefügt werden, wenn ein Client der \ac{REST} \ac{API} den Namen des Autors und seine Spezialisierung zusendet. \autoref{lst:createOperationAPI} im Anhang definiert die \ac{API}-Route \glqq createAuthor\grqq, bei deren Aufruf die Methode \texttt{create\_author} aufgerufen wird. Mit der Konfiguration \texttt{methods=['POST']} wird festgelegt, dass ein Client nur mit der Basisoperation \ac{HTTP} POST anfragen darf. Nach Aufruf nimmt die Methode den \ac{JSON}-Payload entgegen und lädt die Daten anschließend für die Deserialisierung in das marschmallow Schema, das ein Autor-Objekt erzeugt. Das Modul wirft automatisch eine \texttt{ValidationException}, wenn die empfangenen Daten ein falsches Format aufweisen. Anschließend wird aus Konsistenzgründen überprüft, ob der Autor bereits in der Datenbank angelegt ist. Falls nein, wird die \texttt{create}-Methode der Autor-Instanz aufgerufen und der Autor in die Datenbank eingefügt. Mit \texttt{make\_response} und \texttt{jsonify} werden dem Client sowohl im Fehlerfall, als auch im Erfolgsfall entsprechende Nachrichten mit Fehlercodes als \ac{JSON} zurückgesendet, siehe \autoref{img:resultsCREATE}. Hier ekrennt man die Stateless Eigenschaft einer \ac{REST} \ac{API} und die Autonomität der einzelnen Computer von verteilten Systemen. Client und Server sind von ihren Zuständen unabhängig voneinander und agieren autonom. Der Client muss dem Server einen vollständigen Satz Daten übermitteln, dass der Server die Anfrage des Clients verstehen kann. Geht durch einen Netzwerkfehler ein Teil der Daten (zum Beispiel die Spezialisierung des Autors) verloren, muss der Client die gesamten Daten erneut senden. Nur den verlorenen Teil der Informationen neu zu versenden reicht nicht aus, denn der Server merkt sich die Zustände oder bereits vorhandene Daten des Clients nicht. Das würde nach Fielding \cite[S.78ff.]{fieldingREST} nicht dem \ac{REST}-Architekturstil entsprechen.
+
+\section{READ Operation der \ac{REST} \ac{API}}
+\label{sec:readAPI}
+
+\autoref{lst:readOperationAPI} im Anhang zeigt den Code für den Abruf aller in der Datenbank vorhandenen Autoren. Ruft der Client die \ac{API}-Route \glqq getAuthors\grqq mit der Basisoperation \ac{HTTP} GET auf, werden alle Autoren im Format \ac{JSON} an den Client zurückgegeben. Zu Beginn holt die \texttt{query.all()}-Operation alle Autoren aus der Datenbank und gibt eine Liste von Referenzen auf Autor-Objekten zurück. Danach werden alle Objekte in der \texttt{dump}-Methode \cite{marshmallowQuickstart} in \ac{JSON}-Format serialisiert und zurückgegeben, siehe \autoref{img:resultsREAD}. Das Beispiel zeigt, dass im \acs{REST}--Architekturstil eine Ressource durch eine langlebige \acs{URI} repräsentiert wird, obwohl es den Anschein erweckt, dass hier eine Menge an gleichartigen Ressourcen durch eine gemeinsame \acs{URI} referenziert wird. Die Operation und die \acs{URI} ist gültig, weil sie eine Liste an Autoren-Objekten zurückgibt und die Liste einer Ressource entspricht. Die GET-Operation ist safe und idempotent \cite{rahnRESTAPI}, weil sie keine Ressourcen verändert und ein mehrfaches Aufrufen dieser Operation immer das gleiche Ergebnis liefert. Es sei denn ein anderer Aufrufer aktualisiert die Autoren-Tabelle. Der Server muss also entsprechende Caching-Informationen im Header mitliefern, um Inkonsistenzen im Datenbestand des Clients zu vermeiden.
+
+\section{UPDATE Operation der \ac{REST} \ac{API}}
+\label{sec:updateAPI}
+
+Wie eine UPDATE Operation in Flask umgesetzt werden kann, ist im Anhang in \autoref{lst:updateOperationAPI} dargestellt. Ruft ein Client die \ac{API}-Route \glqq updateAuthor\grqq mit der ID eines existierenden Authors auf, werden je nachdem welche Parameter der Payload enhält, die Einträge des Autors aktualisiert. So kann der Name, die Spezialisierung oder beides verändert werden. Ein Client muss hierfür die \ac{HTTP}-Basisoperation PUT verwenden und in der \acs{URI} durch Angabe der ID einen existieren Autor referenzieren. Nachdem der Payload empfangen wurde, wird überprüft, ob unter der ID ein Autor in der Datenbank vorhanden ist. Falls nein, wird das dem Client mitgeteilt und keine Änderungen gemacht. Falls ja wird überprüft, ob die mitgelieferten Daten valide sind und falls das der Fall ist, werden die Daten des Autors aktualisiert. An den Client wird im Erfolgsfall das serialisierte Autor-Objekt,das die Änderungen bereits enthält, zurückgegeben, siehe \autoref{resultsUPDATE}. Die PUT-Methode ist idempotent, weil sie immer wieder zum gleichen Ergebnis führt und der Aufrufer die Aktion ohne Konsequenzen immer wiederholen kann \cite{rahnRESTAPI}. Eine durch PUT modifizierte Ressource ist nicht safe, weil sie durch eine andere Ressource ersetzt wird \cite{rahnRESTAPI}. Weil sich hierdurch Datenbestände, die zuvor Clients mit einer GET-Operation angefragt haben, ändern können und dadurch Inkonsistenzen auf Seiten der Clients entstehen können, muss der Server den Clients für solche Fälle die richtigen Caching-Regeln im \ac{HTTP}-Header mitteilen \cite{cachingRESTAPI}. Die Vermeidung von Inkonsistenzen ist nach Tanenbaum \cite[S.32]{andrew2008verteilte} eine Herausforderung beim Entwurf verteilter Systemen. Caching kann einerseits Netzwerkfehler und Latenzen maskieren, andererseits können Clients, die mit PUT- oder POST-Operationen den Datenbestand modifizieren, Inkonsistenzen bei lesenden Clients verursachen.
+
+\section{DELETE Operation der \ac{REST} \ac{API}}
+\label{sec:deleteAPI}
+
+Die DELETE Operation unterscheidet sich nicht von den Ansätzen der bereits diskutierten Operationen, nur das ein Autor durch Aufruf einer \acs{URI} aus der Datenbank gelöscht werden kann. Aus Gründen der Vollständigkeit ist die Implementierung im Anhang in \autoref{lst:deleteOperationAPI} aufgeführt.
+
+\section{Bereitstellung der Applikation in einer Produktivumgebung}
+\label{sec:ProductiveDeployment}
+
+Laut der offiziellen Flask-Dokumentation ist der interne Development Webserver von Werkzeug nicht für die Bereitstellung der Applikation in Produktivumgebungen geeignet \cite{flaskAppDeployment}. Es empfiehlt sich die Applikation über die in \cite{flaskAppDeployment} aufgeführten Möglichkeiten bereitzustellen. Die Grundidee ist, durch zusätzlicher Middleware und weiteren Server-Komponenten die Sicherheit, Transparenz und die Robustheit des verteilten Systems zu erhöhen. Ein Proxy wird zum Dispatchen von Anfragen zwischen den Clients und dem Server mit der Flask Applikation gesetzt, siehe \cite[S.612ff.]{andrew2008verteilte} für mehr Details. Der Proxy interagiert als vorgeschaltete Zwischenstufe mit den Clients und leitet die Anfragen sicher zur Flask Applikation weiter, siehe Anhang \autoref{img:proxyArchitecture}. Der nutzen für die Gesamtheit des verteilten Systems ist nicht nur die Steigerung an Security, sondern auch, die Erhöhung der Fehlertoleranz des Systems \cite[S.20ff.]{richterArchitekturVS}. Hinter dem Proxy können mehrere identische Flask Applikationen repliziert werden. Der Proxy verbirgt die Tatsache, dass hinter diesem viele identische Applikationen sind, die Anfragen der Clients bedienen können. Für Clients ist der Proxy und damit das gesamte verteilte System unter einer IP-Adresse erreichbar, unabhängig davon auf welche konkrete Flask Applikation der Proxy die Anfragen weiterleitet. Die Verteilung hängt vom implementierten Algorithmus ab. Eine Möglichkeit wäre es, nach dem Grad der Auslastung der Server sinnvoll zu verteilen. Die Redundanz kann sich positiv auf die Fehlertoleranz auswirken. Fällt ein Flask Server aus, kann der Proxy die Anfragen auf die anderen Flask Server verteilen ohne das ein Benutzer oder ein Client diesen Ausfall tatsächlich bemerkt. Das verteilte System wirkt gegenüber den Clients und Benutzern in Summe und verbirgt konkrete Implementierungsdetails durch Transparenz, siehe \cite[S.21ff.]{andrew2008verteilte}. Ferner kann der Proxy das Caching von wiederholt angefragten Ressourcen übernehmen und die Belastbarkeit und die Geschwindigkeit des verteilten Systems erhöhen.\cite[S.20ff.]{richterArchitekturVS}
+
+\chapter{Zusammenfassung}
+\label{chap:Zusammenfassung}
+
+Die Hausarbeit zeigt, wie mit Python Flask ein einfacher \ac{REST} Web Service entwickelt werden kann. Als Ergebnis der Arbeit liegt eine funktionsfähige Applikation vor die unter URL! heruntergeladen werden kann. Sie setzte die Implementierungen in Bezug zu den Grundlagen von verteilten Systemen und diskutierte wichtige Aspekte von Web Services im \ac{REST}-Architekturstil. In der Zukunft könnte die Sicherheit der Datenbankzugangsdaten besser gewährleistet werden, wenn diese in den System-Variablen des Betriebssystems anstatt in der Datei des Programm-Codes gespeichert werden. Außerdem könnte ein verteiltes System mit mehreren identischen Flask Instanzen programmiert werden, sodass die einzelne Flask Instanz als Single-Point-Of-Failure durch Redundanz eliminiert wird. So könnte ein tieferer Blick in die Implementierung von redundanten und fehlertoleranten verteilten Systemen geworfen werden.
+
+
+\end{onehalfspacing}
+
+\newpage
+
+%setze Anhang mit appendix
+%addpart, sodass Anhang im Inhaltsverzeichnis ohne Buchstaben auftaucht
+\cleardoublepage
+\appendix
+\addpart{Anhang}
+
+%inhaltsverzeichnis
+\cleardoublepage
+\tableofcontents
+
+%abbildungsverzeichnis
+\cleardoublepage
+\listoffigures
+\newpage
+
+%tabellenverzeichnis
+\cleardoublepage
+\listoftables
+\newpage
+
+%listingverzeichnis
+\cleardoublepage
+\lstlistoflistings
+\newpage
+
+%abkürzungsverzeichnis
+\cleardoublepage
+\chapter{Abkürzungsverzeichnis}
+\begin{acronym}[YTMMM]
+\setlength{\itemsep}{-\parsep}
+\acro{REST}{Representational State Transfer}
+\acro{WWW}{World Wide Web}
+\acro{SOA}{Service Oriented Architecture}
+\acro{SOAP}{Simple Object Access Protocol}
+\acro{RMI}{Remote Method Invocation}
+\acro{XML}{Extensible Markup Language}
+\acro{BSD}{Berkeley Software Distribution}
+\acro{DHBW}{Duale Hochschule Baden-Württemberg}
+\acro{API}{Application Programming Interface}
+\acro{ROA}{Ressource Oriented Architecture}
+\acro{HTTP}{Hypertext Transfer Protocol}
+\acro{HTML}{Hypertext Markup Language}
+\acro{URI}{Uniform Resource Identifier}
+\acro{PDF}{Portable Document Format}
+\acro{JSON}{JavaScript Object Notation}
+\acro{WSGI}{Web Server Gateway Interface}
+\acro{DBMS}{Datenbank Management System}
+\acro{ORM}{Object Relational Mapper}
+\end{acronym}
+
+%Literaturverzeichnis
+\bibliography{literatur}
+
+\chapter{Minimale Flask-Applikation}
+\label{chap:FlaskBeginner}
+
+\begin{lstlisting}[language=python,caption={Minimale Flask Applikation}, label={lst:MinimalFlaskApp}]
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route('/hello-to/<string:name>')
+def hello_to(name):
+ return f'Hello, {name}!'
+
+if __name__== '__main__':
+ app.run()
+\end{lstlisting}
+
+\textbf{Bemerkung:} \glqq <string:name>\grqq definiert ein Übergabeargument, dass die Route erwartet. Das übergebene Argument wird als Zeichensatz (String) interpretiert und in den Rückgabewert der Funktion eingefügt, siehe \cite{flaskDocRouting} und \cite{pythonDocFormattedStrings}.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.7\linewidth]{images/ResultMinimalApp}
+	\caption{Ergebnis nach Aufruf der URI mit dem Browser}
+	\label{img:ResultMinimalApp}
+\end{figure}
+
+\chapter{Einordnung der Middleware in das verteilte System}
+\label{chap:MiddlewareArchitecture}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/MiddlewareArchitecture}
+	\caption{Einordnung der Middleware als Schicht in das verteilte System \cite[S.20]{andrew2008verteilte}}
+	\label{img:MiddlewareArchitecture}
+\end{figure}
+
+\chapter{Architektur der CRUD-Applikation}
+\label{chap:ArchitekturCRUDapp}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/ArchitectureCRUDapp}
+	\caption{Überblick über die Architektur der CRUD-Applikation \cite[S.6]{pythonFlaskREST}}
+	\label{img:ArchitectureCRUDapp}
+\end{figure}
+
+\chapter{Beispiel des Datenaustauschformats \ac{JSON}}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/json-example}
+	\caption{Beispiel: Datenaustauschformat JSON, siehe \url{https://techeplanet.com/json-example/} (Einsichtnahme: 24.04.2020)}
+	\label{img:ExampleJSON}
+\end{figure}
+
+\chapter{Datenbankzugriff mit SQLAlchemy}
+\label{chap:DBaccessSQLAlchemy}
+
+\begin{lstlisting}[language=python,caption={Konfiguration der Flask Applikation mit SQLAlchemy}, label={lst:configFlaskSQLAlchemy}]
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://testuser:hallo123@127.0.0.1:3306/authors'
+db = SQLAlchemy(app)
+
+if __name__ == "__main__":
+ app.run(debug=True)
+\end{lstlisting}
+
+\textbf{Bemerkungen:} Die Variable \texttt{debug} ist auf \texttt{True} gesetzt, um während der Entwicklungszeit die Fehlersuche zu vereinfachen.
+
+\bigskip
+
+\begin{lstlisting}[language=python,caption={Konfiguration mit System-Variablen für den Schutz sensibler Zugangsdaten, Ausschnitt des Codes}, label={lst:configFlaskSQLAlchemySecure}]
+# Vorher export der System-Variablen auf der Linux-Bash:
+# $ export db_user=testuser
+# $ export db_passwd=hallo123
+# $ export db_host=127.0.0.1:3306
+# $ export db_name=authors
+
+from os import environ
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = f'mysql+pymysql://\
+{environ.get('db_user')}:\
+{environ.get('db_passwd')}@\
+{environ.get('db_host')}/{environ.get('db_name')}'
+db = SQLAlchemy(app)
+
+\end{lstlisting}
+
+\textbf{Bemerkungen:}
+
+\begin{description}
+\item[testuser] Benutzer, der Zugriff auf die Datenbank hat.
+\item[hallo123] Passwort des Benutzers
+\item[127.0.0.1:3306] IP-Adresse und Port der Datenbank
+\item[authors] Name der bereits existierenden Datenbank
+\end{description}
+
+\pagebreak
+
+\begin{lstlisting}[language=python,caption={Definition des Schemas für das SQLAlchemy Modul}, label={lst:tableSchemaAuthor}]
+class Author(db.Model):
+    __tablename__ = "author"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20))
+    specialisation = db.Column(db.String(50))
+
+    def __init__(self, name, specialisation):
+        self.name=name
+        self.specialisation=specialisation
+
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+
+db.create_all()
+
+\end{lstlisting}
+
+\bigskip
+
+\begin{lstlisting}[language=python,caption={Definition des Schemas für das marshmallow Modul}, label={lst:marshmallowSchema}]
+class AuthorSchema(ModelSchema):
+    class Meta(ModelSchema.Meta):
+        model = Author
+        sqla_session = db.session
+
+    id = fields.Number(dump_only=True)
+    name = fields.String(required=True)
+    specialisation = fields.String(required=True)
+\end{lstlisting}
+
+\textbf{Bemerkungen:}
+
+\bigskip
+
+\begin{description}
+\item[dump\_only] Falls \texttt{True}, erfolgt ausschließlich lesender Zugriff auf das Attribut.\cite{marshmallowQuickstart}
+\item[required] Falls \texttt{True}, ist eine Deserialisierung ohne das Vorhanden sein des Feldes in den Eingabedaten nicht möglich.\cite{marshmallowQuickstart}
+\end{description}
+
+\chapter{CRUD-Operationen}
+
+\section{CREATE Operation}
+
+\begin{lstlisting}[language=python,caption={Code für die CREATE Operation der CRUD-Applikation}, label={lst:createOperationAPI}]
+@app.route('/createAuthor', methods = ['POST'])
+def create_author():
+    try:
+        data = request.get_json()
+        author_schema = AuthorSchema()
+        author = author_schema.load(data)
+        if Author.query.filter_by(name=data.get("name")).first():
+            return make_response(jsonify({'error': 'author does already exist.'}), 401)
+        result = author_schema.dump(author.create())
+        return make_response(jsonify({"author": result}),201)
+    except ValidationError as e:
+        return make_response(jsonify({'error': f'{e.messages}'}), 401)
+    except Exception:
+        return make_response(jsonify({'error': 'an unkown issue caused this error.'}), 500)
+\end{lstlisting}
+
+\bigskip
+
+\begin{description}
+\item[load(data)] Deserialisieren der Daten und Konvertierung in ein Autor-Objekt \cite{marshmallowQuickstart}
+\item[dump(author.create())] \texttt{create} fügt den Autor in die Datenbank ein und gibt eine Referenz auf das Objekt zurück. \texttt{dump} serialisiert das Objekt in das \ac{JSON}-Format.\cite{marshmallowQuickstart}
+\item[result] enthält das in \ac{JSON} serialisierte Autor-Objekt.
+\end{description}
+
+\bigskip
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/resultsCREATE}
+	\caption{Ergebnis und Antworten der \ac{REST} \ac{API} Operation CREATE}
+	\label{img:resultsCREATE}
+\end{figure}
+
+\pagebreak
+
+\section{READ Operation}
+
+\begin{lstlisting}[language=python,caption={Code für die READ Operation der CRUD-Applikation}, label={lst:readOperationAPI}]
+@app.route('/getAuthors', methods = ['GET'])
+def get_authors():
+    try:
+        get_authors = Author.query.all()
+        author_schema = AuthorSchema(many=True)
+        authors = author_schema.dump(get_authors)
+        return make_response(jsonify({"authors": authors}))
+    except Exception:
+        return make_response(jsonify({'error': 'an unkown issue caused this error.'}), 500)
+\end{lstlisting}
+
+\bigskip
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.6\linewidth]{images/readResult}
+	\caption{Ergebnis und Antworten der \ac{REST} \ac{API} Operation READ}
+	\label{img:resultsREAD}
+\end{figure}
+
+\pagebreak
+
+\section{UPDATE Operation}
+
+\begin{lstlisting}[language=python,caption={Code für die UPDATE Operation der CRUD-Applikation}, label={lst:updateOperationAPI}]
+@app.route('/updateAuthor/<int:id>', methods = ['PUT'])
+def update_author_by_id(id):
+    try:
+        data = request.get_json()
+        get_author = Author.query.get(id)
+        if not get_author:
+            return make_response(jsonify({'error': 'author does not exist.'}), 404)
+        if data.get('specialisation'):
+            get_author.specialisation = data['specialisation']
+        if data.get('name'):
+            get_author.name = data['name']
+        db.session.add(get_author)
+        db.session.commit()
+        author_schema = AuthorSchema(only=['id', 'name','specialisation'])
+        author = author_schema.dump(get_author)
+        return make_response(jsonify({"author": author}))
+    except Exception:
+        return make_response(jsonify({'error': 'an unkown issue caused this error.'}), 500)
+\end{lstlisting}
+
+\textbf{Bemerkungen:}
+\begin{description}
+\item[<int:id>] Ganzzahlige ID eines existierenden Autors als Übergabeparameter in der \acs{URI}.\cite{flaskDocRouting}
+\item[only=...] Selektion von Attributen, die vom marshmallow Schema unbedingt beachtet werden sollen.\cite{marshmallowQuickstart}
+\end{description}
+
+\bigskip
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/resultsUPDATE}
+	\caption{Ergebnis und Antworten der \ac{REST} \ac{API} Operation UPDATE}
+	\label{img:resultsUPDATE}
+\end{figure}
+
+\pagebreak
+
+\section{DELETE Operation}
+
+\begin{lstlisting}[language=python,caption={Code für die DELETE Operation der CRUD-Applikation}, label={lst:deleteOperationAPI}]
+@app.route('/deleteAuthor/<int:id>', methods = ['DELETE'])
+def delete_author_by_id(id):
+    try:
+        get_author = Author.query.get(id)
+        if not get_author:
+            return make_response(jsonify({'error': 'author does not exist.'}), 404)
+        db.session.delete(get_author)
+        db.session.commit()
+        return make_response("",204)
+    except Exception:
+        return make_response(jsonify({'error': 'an unkown issue caused this error.'}), 500)
+\end{lstlisting}
+
+\bigskip
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/resultsDELETE}
+	\caption{Ergebnis und Antworten der \ac{REST} \ac{API} Operation DELETE}
+	\label{img:resultsDELETE}
+\end{figure}
+
+\chapter{Architektur eines verteilten Flask-Systems in der Produktivumgebung}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\linewidth]{images/proxyArchitecture}
+	\caption{Proxy als Zwischenstufe in der Produktivumgebung einer Flask Applikation}
+	\label{img:proxyArchitecture}
+\end{figure}
+
+\end{document}
